@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "390919471828",
+    "firebase_url": "https://flutterproject1-74631.firebaseio.com",
+    "project_id": "flutterproject1-74631",
+    "storage_bucket": "flutterproject1-74631.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:390919471828:android:17a45e93b4fc56a0",
+        "android_client_info": {
+          "package_name": "com.example.noah"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "390919471828-attl38ghqm5si8d250aot1ml66e2tln7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_Ia3fSwohL1l1havgkj4ZV1HmMsrTuuQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "390919471828-attl38ghqm5si8d250aot1ml66e2tln7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
