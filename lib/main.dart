@@ -24,6 +24,17 @@ class MyCustomForm extends StatefulWidget {
   _MyCustomFormState createState() => _MyCustomFormState();
 }
 
+class User {
+    int id;
+    String lastname;
+    String firstname;
+    String email;
+    String password;
+    // void login(email){
+    //    print('Welcome! Your email is ${email}');
+    // }
+}
+
 class _MyCustomFormState extends State<MyCustomForm> {
   //To create a textfield connector step1
   final myController = TextEditingController();
@@ -160,53 +171,39 @@ class _MyCustomFormState extends State<MyCustomForm> {
   }
   void createRecord(){
     print('saving');
-    databaseReference.child("0").set({
+    databaseReference.child("posts/firstpost").set({
       'title': 'Mastering Happy',
       'description': 'Programming Guide for J2EE'
     });
-    databaseReference.child("1").set({
+    databaseReference.child("posts/secondpost").set({
       'title': 'Flutter in Noah',
       'description': 'Complete Programming Guide to learn Flutter'
     });
   }
 
   void checkRecord(){
-    var x;
-    databaseReference.child("").once().then((DataSnapshot snapshot) {
-    // print(snapshot.value);
-    // this one can seperate 2 object
-    // for(x in snapshot.value){
-    //   print(x);
-    // //   setState(() {
-    // //   // titles.insert(0, x);
-    // //   titles.addAll(x);
-    // // });
     
-    // }
-    // This one can show where u are
-    // print(snapshot.key);
-    //This one will show the whole object path
-    // print(snapshot.value);
-    //This one will show the amount of thing
-    // print(snapshot.value.length);
+    String newtest;
 
-    // list.forEach((element) => print(element));
+    print('inside');
+    databaseReference.child('posts/').once().then((DataSnapshot snapshot) {
+    print('Data can be seen: ${snapshot.value.toString()}');
 
+    print(newtest);
 
+    print('path: ${snapshot.key}');
 
-
-    // var items = [];
-    // snapshot.forEach((child) => {
-    //   items.push({
-    //     id: child.key,
-    //     description: child.val(),
-    //   });
-    // });
-    
+     Map<dynamic, dynamic> fridgesDs = snapshot.value;
+        fridgesDs.forEach((key, value) {
+          // if (value) {
+            // fridges.add(key);
+            print(value['description']);
+          // }
+        });
   });
 
-
-  
+    
+    
 
   }
 
