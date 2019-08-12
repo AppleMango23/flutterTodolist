@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'dart:math';
 
 // import 'second.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,27 +26,18 @@ class MyCustomForm extends StatefulWidget {
   _MyCustomFormState createState() => _MyCustomFormState();
 }
 
-class User {
-    int id;
-    String lastname;
-    String firstname;
-    String email;
-    String password;
-    // void login(email){
-    //    print('Welcome! Your email is ${email}');
-    // }
-}
-
 class _MyCustomFormState extends State<MyCustomForm> {
   //To create a textfield connector step1
   final myController = TextEditingController();
   String textfield1 = "";
   final databaseReference = FirebaseDatabase.instance.reference();
 
+  
+
   @override
   void initState() {
     super.initState();
-
+    checkRecord();
     //make text field connect to function
     // myController.addListener(_printLatestValue);
   }
@@ -169,45 +162,44 @@ class _MyCustomFormState extends State<MyCustomForm> {
       );
     }
   }
+
   void createRecord(){
-    print('saving');
-    databaseReference.child("posts/firstpost").set({
-      'title': 'Mastering Happy',
-      'description': 'Programming Guide for J2EE'
+    print('uploading');
+    var rng = new Random();
+    var rng1 = rng.nextInt(10000000).toString();
+    var path = "posts/"+ rng1;
+    databaseReference.child(path).set({
+      'title': 'zzz',
+      'description': myController.text
     });
-    databaseReference.child("posts/secondpost").set({
-      'title': 'Flutter in Noah',
-      'description': 'Complete Programming Guide to learn Flutter'
-    });
+    myController.text = "";
+
+    checkRecord();
   }
 
   void checkRecord(){
-    
-    String newtest;
+    titles=[];
 
-    print('inside');
     databaseReference.child('posts/').once().then((DataSnapshot snapshot) {
-    print('Data can be seen: ${snapshot.value.toString()}');
-
-    print(newtest);
-
-    print('path: ${snapshot.key}');
-
      Map<dynamic, dynamic> fridgesDs = snapshot.value;
         fridgesDs.forEach((key, value) {
-          // if (value) {
-            // fridges.add(key);
-            print(value['description']);
-          // }
+          // This one will be printing the key of the db
+          print(key);
+          String sendThis = key + "\n" + value['description'];
+          
+          setState(() {
+            titles.insert(0, sendThis);
+          });
+
+          //This one will be printing the value of the db if one specific something get in array
+          // print(value);
+          // print(value['description']);
         });
   });
-
-    
-    
-
   }
 
   List<String> titles = [];
+  // List<String> description = [];
 
   @override
   Widget build(BuildContext context) {
@@ -250,35 +242,25 @@ class _MyCustomFormState extends State<MyCustomForm> {
                     style: TextStyle(fontSize: 23, color: Colors.white)),
               ),
             ),
-            new Container(
-              margin: const EdgeInsets.only(bottom: 6.0),
-              child: new RaisedButton(
-                color: Colors.teal,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-                onPressed: checkRecord,
-                child: new Text('Check Record',
-                    style: TextStyle(fontSize: 23, color: Colors.white)),
-              ),
-            ),
             Expanded(
               child: ListView.builder(
                 itemCount: titles.length,
                 itemBuilder: (context, index) {
                   final item = titles[index];
+                  // final item2 = description[index];
                   return Card(
                     child: ListTile(
-                      title: Text(item),
+                      title: Text('$item',style: TextStyle(fontSize: 18),),
                       onTap: () {
-                        //                                  <-- onTap
                         setState(() {
                           titles.insert(index, 'Planet');
                         });
                       },
                       onLongPress: (){_deleteFunction(index);},
-                        
-                      
                     ),
+                    
+                    
+                    
                   );
                 },
               ),
@@ -288,4 +270,14 @@ class _MyCustomFormState extends State<MyCustomForm> {
       ),
     );
   }
+}
+// The base class for the different types of items the list can contain.
+abstract class ListItem {}
+
+// A ListItem that contains data to display a message.
+class MessageItem implements ListItem {
+  final String sender;
+  final String body;
+
+  MessageItem(this.sender, this.body);
 }
