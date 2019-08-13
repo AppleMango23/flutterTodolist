@@ -32,8 +32,6 @@ class _MyCustomFormState extends State<MyCustomForm> {
   String textfield1 = "";
   final databaseReference = FirebaseDatabase.instance.reference();
 
-  
-
   @override
   void initState() {
     super.initState();
@@ -97,9 +95,11 @@ class _MyCustomFormState extends State<MyCustomForm> {
     }
   }
 
-  _deleteFunction(int index) {
+  //make this link to the firebase + map array
+  _deleteFunction(String textDelete) {
 
-    var textIs =titles[index];
+    // var textIs =titles[index];
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -107,7 +107,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
         return AlertDialog(
           title: new Text("Be caution!",style: TextStyle(fontSize: 22),),
           content: new Text(
-              "Be caution you will be deleting text \"$textIs\", make sure that you selected the correct one. Thank you.",style: TextStyle(fontSize: 18),),
+              "Be caution you will be deleting text \"$textDelete\", make sure that you selected the correct one. Thank you.",style: TextStyle(fontSize: 18),),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
@@ -118,9 +118,10 @@ class _MyCustomFormState extends State<MyCustomForm> {
             ),
             new RaisedButton(
               onPressed: () {
-                setState(() {
-                  titles.removeAt(index);
-                });
+                databaseReference.child('posts/'+textDelete).remove();
+                cats.remove(textDelete);
+                checkRecord();
+                print(cats);
                 Navigator.of(context).pop();
               },
               child: new Text('Confirm',
@@ -164,11 +165,14 @@ class _MyCustomFormState extends State<MyCustomForm> {
   }
 
   void createRecord(){
-    print('uploading');
+    //This one will create a random number
     var rng = new Random();
-    var rng1 = rng.nextInt(10000000).toString();
-    var path = "posts/"+ rng1;
-    databaseReference.child(path).set({
+    var rng1 = rng.nextInt(10000000000).toString();
+    // var path = "posts/";
+    var path = "posts/"+rng1;
+    //.push() will give random number
+    // databaseReference.child(path).push().set({
+      databaseReference.child(path).set({
       'title': 'zzz',
       'description': myController.text
     });
@@ -185,20 +189,43 @@ class _MyCustomFormState extends State<MyCustomForm> {
         fridgesDs.forEach((key, value) {
           // This one will be printing the key of the db
           print(key);
+
+          //Use map to solve this object problem
+
+          // Map<String, int> cats = {"hello":5,"test":88};
+
+          // items: List<ListItem>.generate(1,(i) => MessageItem("hello 5", "Message is 5"),);
+
+          // String sendThis : MessageItem("hello 5", "Message is 5");
           String sendThis = key + "\n" + value['description'];
           
           setState(() {
             titles.insert(0, sendThis);
           });
 
+          
+          cats.addAll({key:value['description']});
+          print(cats);
+          
+          // setState(() {
+          //   titles.insert(0, sendThis);
+          // });
+
           //This one will be printing the value of the db if one specific something get in array
           // print(value);
           // print(value['description']);
+
+          
+
+         
+
         });
   });
   }
 
   List<String> titles = [];
+  Map<String, String> cats = {};
+
   // List<String> description = [];
 
   @override
@@ -220,17 +247,17 @@ class _MyCustomFormState extends State<MyCustomForm> {
                 labelText: 'TextField2',
               ),
             ),
-            new Container(
-              margin: const EdgeInsets.only(bottom: 2.0),
-              child: new RaisedButton(
-                color: Colors.teal,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-                onPressed: submitData,
-                child: new Text('Submit data',
-                    style: TextStyle(fontSize: 23, color: Colors.white)),
-              ),
-            ),
+            // new Container(
+            //   margin: const EdgeInsets.only(bottom: 2.0),
+            //   child: new RaisedButton(
+            //     color: Colors.teal,
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(20)),
+            //     onPressed: submitData,
+            //     child: new Text('Submit data',
+            //         style: TextStyle(fontSize: 23, color: Colors.white)),
+            //   ),
+            // ),
             new Container(
               margin: const EdgeInsets.only(bottom: 6.0),
               child: new RaisedButton(
@@ -244,20 +271,42 @@ class _MyCustomFormState extends State<MyCustomForm> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: titles.length,
+                itemCount: cats.length,
                 itemBuilder: (context, index) {
-                  final item = titles[index];
-                  // final item2 = description[index];
+                  var hey = cats.keys.toList();
+
+                  final item = cats[hey[index]];
+                  final item2 = hey[index];
+
                   return Card(
                     child: ListTile(
-                      title: Text('$item',style: TextStyle(fontSize: 18),),
-                      onTap: () {
-                        setState(() {
-                          titles.insert(index, 'Planet');
-                        });
-                      },
-                      onLongPress: (){_deleteFunction(index);},
+                      title: 
+                      
+                      // Text('$item2 \n$item ',style: TextStyle(fontSize: 18),)
+                      
+                      RichText(
+                        text: TextSpan(
+                          text: '$item2\n',
+                          style: 
+                            new TextStyle(
+                            inherit: true,
+                            fontSize: 23,
+                            fontWeight: FontWeight.w700,
+                            decorationStyle: TextDecorationStyle.wavy,
+                            color: Colors.black),
+
+                          children: <TextSpan>[
+                            TextSpan(text:'$item', style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17)),
+                          ],
+                        ),
+                      )
+                      
+                      ,
+
+                      onLongPress: (){_deleteFunction(item2);},
                     ),
+                    
+                    
                     
                     
                     
