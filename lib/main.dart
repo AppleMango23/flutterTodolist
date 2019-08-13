@@ -96,18 +96,32 @@ class _MyCustomFormState extends State<MyCustomForm> {
   }
 
   //make this link to the firebase + map array
-  _deleteFunction(String textDelete) {
+  _deleteFunction(String textDelete, String realName) {
 
     // var textIs =titles[index];
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
         return AlertDialog(
-          title: new Text("Be caution!",style: TextStyle(fontSize: 22),),
-          content: new Text(
-              "Be caution you will be deleting text \"$textDelete\", make sure that you selected the correct one. Thank you.",style: TextStyle(fontSize: 18),),
+          title: FlatButton.icon(
+            color: Colors.transparent,
+            icon: 
+            new IconTheme(
+                data: new IconThemeData(
+                    size: 35,
+                    color: Colors.red), 
+                child: new Icon(Icons.delete),
+            ),
+            label: Text('Be caution!',style: TextStyle(color:Colors.black,fontSize: 23)), 
+            shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)),
+            onPressed: null,
+          ),
+          content: 
+          // FlatButton.icon(onPressed: null, icon: null, label: null),
+          new Text(
+              "Be caution you will be deleting text \"$realName\". Please double confirm.",style: TextStyle(fontSize: 18),),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
@@ -118,9 +132,9 @@ class _MyCustomFormState extends State<MyCustomForm> {
             ),
             new RaisedButton(
               onPressed: () {
-                databaseReference.child('posts/'+textDelete).remove();
                 cats.remove(textDelete);
                 checkRecord();
+                databaseReference.child('posts/'+textDelete).remove();
                 print(cats);
                 Navigator.of(context).pop();
               },
@@ -167,7 +181,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
   void createRecord(){
     //This one will create a random number
     var rng = new Random();
-    var rng1 = rng.nextInt(10000000000).toString();
+    var rng1 = rng.nextInt(10000000).toString();
     // var path = "posts/";
     var path = "posts/"+rng1;
     //.push() will give random number
@@ -232,7 +246,32 @@ class _MyCustomFormState extends State<MyCustomForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ListView'),
+        title:  
+        FlatButton.icon(
+          color: Colors.transparent,
+          icon: 
+          new IconTheme(
+              data: new IconThemeData(
+                  size: 35,
+                  color: Colors.white), 
+              child: new Icon(Icons.library_books),
+          ),
+          label: Text('ListView',style: TextStyle(color:Colors.white,fontSize: 23)), 
+          shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20)),
+          onPressed: null,
+        ),
+        actions: <Widget>[
+            // action button
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                // _select(choices[0]);
+              },
+            ),
+            // action button
+            
+          ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -258,17 +297,22 @@ class _MyCustomFormState extends State<MyCustomForm> {
             //         style: TextStyle(fontSize: 23, color: Colors.white)),
             //   ),
             // ),
-            new Container(
-              margin: const EdgeInsets.only(bottom: 6.0),
-              child: new RaisedButton(
-                color: Colors.teal,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-                onPressed: createRecord,
-                child: new Text('Create Record',
-                    style: TextStyle(fontSize: 23, color: Colors.white)),
-              ),
+
+          FlatButton.icon(
+            color: Colors.teal,
+            icon: 
+            new IconTheme(
+                data: new IconThemeData(
+                    size: 35,
+                    color: Colors.white), 
+                child: new Icon(Icons.add),
             ),
+            label: Text('Add a Record',style: TextStyle(color:Colors.white,fontSize: 23)), 
+            shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)),
+            onPressed: createRecord,
+          ),
+
             Expanded(
               child: ListView.builder(
                 itemCount: cats.length,
@@ -280,30 +324,31 @@ class _MyCustomFormState extends State<MyCustomForm> {
 
                   return Card(
                     child: ListTile(
+                      leading: Icon(Icons.navigate_next),
                       title: 
                       
                       // Text('$item2 \n$item ',style: TextStyle(fontSize: 18),)
                       
                       RichText(
                         text: TextSpan(
-                          text: '$item2\n',
+                          text: '',
                           style: 
                             new TextStyle(
                             inherit: true,
                             fontSize: 23,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w800,
                             decorationStyle: TextDecorationStyle.wavy,
                             color: Colors.black),
 
                           children: <TextSpan>[
-                            TextSpan(text:'$item', style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17)),
+                            TextSpan(text:'$item', style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18.6)),
                           ],
                         ),
                       )
                       
                       ,
 
-                      onLongPress: (){_deleteFunction(item2);},
+                      onLongPress: (){_deleteFunction(item2,item);},
                     ),
                     
                     
