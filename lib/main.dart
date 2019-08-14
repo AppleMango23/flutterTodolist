@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:math';
+import 'dart:async';
 
 // import 'second.dart';
 void main() => runApp(MyApp());
@@ -97,29 +98,25 @@ class _MyCustomFormState extends State<MyCustomForm> {
 
   //make this link to the firebase + map array
   _deleteFunction(String textDelete, String realName) {
-
-    // var textIs =titles[index];
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15)),
           title: FlatButton.icon(
             color: Colors.transparent,
             icon: 
             new IconTheme(
                 data: new IconThemeData(
-                    size: 35,
+                    size: 46,
                     color: Colors.red), 
-                child: new Icon(Icons.delete),
+                child: new Icon(Icons.error_outline),
             ),
             label: Text('Be caution!',style: TextStyle(color:Colors.black,fontSize: 23)), 
-            shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)),
             onPressed: null,
           ),
           content: 
-          // FlatButton.icon(onPressed: null, icon: null, label: null),
           new Text(
               "Be caution you will be deleting text \"$realName\". Please double confirm.",style: TextStyle(fontSize: 18),),
           actions: <Widget>[
@@ -130,37 +127,159 @@ class _MyCustomFormState extends State<MyCustomForm> {
                 Navigator.of(context).pop();
               },
             ),
-            new RaisedButton(
-              onPressed: () {
+            FlatButton.icon(
+            color: Colors.teal,
+            shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15)),
+            icon: 
+            new IconTheme(
+                data: new IconThemeData(
+                    size: 23,
+                    color: Colors.white), 
+                child: new Icon(Icons.delete_outline),
+            ),
+            label: Text('Delete',style: TextStyle(color:Colors.white,fontSize: 20)), 
+            // shape: RoundedRectangleBorder(
+            // borderRadius: BorderRadius.circular(20)),
+            onPressed: () {
                 cats.remove(textDelete);
                 checkRecord();
                 databaseReference.child('posts/'+textDelete).remove();
-                print(cats);
                 Navigator.of(context).pop();
+                trigerSnackBar('Deleted a list!');
               },
-              child: new Text('Confirm',
-                  style: TextStyle(fontSize: 20, color: Colors.white)),
-            ),
+          ),
           ],
         );
       },
     );
   }
-
-  void submitData() {
-    int index = 0;
-    if(myController.text != ""){
-      setState(() {
-      titles.insert(index, myController.text);
+  snackbarFunction(BuildContext context,String wordsToDisplay){
+    final snackBar = SnackBar(
+      content: Text(wordsToDisplay,style: TextStyle(fontSize: 17),),
+      action: SnackBarAction(
+        label: 'Cancel',textColor: Colors.white,
+        onPressed: () {
+          
+        },
+      ),
+      backgroundColor: Colors.teal
+      );
+    Scaffold.of(context).showSnackBar(snackBar);
+    Timer(Duration(seconds: 9), () {
+      Scaffold.of(context).hideCurrentSnackBar();
     });
-    myController.text = "";
+  }
+
+  void trigerSnackBar(String wordToDisplay){
+    snackbarFunction(contextPublic,wordToDisplay);
+  }
+
+  void testing(context) {
+    setState(() {
+      contextPublic=context;
+    });
+
+    showModalBottomSheet<void>(context: context,
+    builder: (BuildContext context) {
+      return new Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Padding(
+            // padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.only(top: 20.0,left: 20,right: 20,bottom: 34),
+        child: Column(
+          children: <Widget>[
+            TextField(
+              maxLength: 30,
+              controller: myController,
+              obscureText: false,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'TextField2',
+              ),
+            ),
+
+          FlatButton.icon(
+            color: Colors.teal,
+            icon: 
+            new IconTheme(
+                data: new IconThemeData(
+                    size: 35,
+                    color: Colors.white), 
+                child: new Icon(Icons.add),
+            ),
+            label: Text('Add',style: TextStyle(color:Colors.white,fontSize: 23)), 
+            shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)),
+            onPressed: createRecord,
+          ),
+          new ListTile(
+            leading: new Icon(Icons.music_note),
+            title: new Text('Music'),
+            onTap: () => null,          
+          ),
+          new ListTile(
+            leading: new Icon(Icons.photo_album),
+            title: new Text('Photos'),
+            onTap: () => null,          
+          ),
+          new ListTile(
+            leading: new Icon(Icons.videocam),
+            title: new Text('Video'),
+            onTap: () => null,          
+          ),
+          new ListTile(
+            leading: new Icon(Icons.photo_album),
+            title: new Text('Photos'),
+            onTap: () => null,          
+          ),
+          
+          ]
+        )
+          )
+          
+        ],
+      );
+   });
+
+    
+  }
+
+  void createRecord(){
+    if(myController.text != ""){
+      var now = new DateTime.now();
+      String newText = now.day.toString()+ "/" + now.month.toString()+ "/" + now.year.toString();
+      var rng = new Random();
+      var rng1 = rng.nextInt(100000000).toString();
+      var path = "posts/"+rng1;
+        databaseReference.child(path).set({'title': newText,'description': myController.text});
+      myController.text = "";
+      Navigator.pop(context);
+      checkRecord();
+      trigerSnackBar('Added new list!');
+  
     }
     else{
       showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Be caution!",style: TextStyle(fontSize: 22),),
+          shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15)),
+          title: 
+          FlatButton.icon(
+            color: Colors.transparent,
+            icon: 
+            new IconTheme(
+                data: new IconThemeData(
+                    size: 46,
+                    color: Colors.red), 
+                child: new Icon(Icons.error_outline),
+            ),
+            label: Text('Be caution!',style: TextStyle(color:Colors.black,fontSize: 23)), 
+            onPressed: null,
+          ),
           content: new Text(
               "There is nothing on textField.",style: TextStyle(fontSize: 18),),
           actions: <Widget>[
@@ -176,72 +295,30 @@ class _MyCustomFormState extends State<MyCustomForm> {
       }
       );
     }
-  }
-
-  void createRecord(){
-    //This one will create a random number
-    var rng = new Random();
-    var rng1 = rng.nextInt(10000000).toString();
-    // var path = "posts/";
-    var path = "posts/"+rng1;
-    //.push() will give random number
-    // databaseReference.child(path).push().set({
-      databaseReference.child(path).set({
-      'title': 'zzz',
-      'description': myController.text
-    });
-    myController.text = "";
-
-    checkRecord();
+    
   }
 
   void checkRecord(){
-    titles=[];
+    
+    cats.clear();
+    dogs.clear();
 
     databaseReference.child('posts/').once().then((DataSnapshot snapshot) {
      Map<dynamic, dynamic> fridgesDs = snapshot.value;
         fridgesDs.forEach((key, value) {
-          // This one will be printing the key of the db
-          print(key);
-
-          //Use map to solve this object problem
-
-          // Map<String, int> cats = {"hello":5,"test":88};
-
-          // items: List<ListItem>.generate(1,(i) => MessageItem("hello 5", "Message is 5"),);
-
-          // String sendThis : MessageItem("hello 5", "Message is 5");
-          String sendThis = key + "\n" + value['description'];
-          
+          //This one need to work with setstate so that it will render once
           setState(() {
-            titles.insert(0, sendThis);
+            cats.addAll({key:value['description']});
+            dogs.addAll({key:value['title']});
           });
-
-          
-          cats.addAll({key:value['description']});
-          print(cats);
-          
-          // setState(() {
-          //   titles.insert(0, sendThis);
-          // });
-
-          //This one will be printing the value of the db if one specific something get in array
-          // print(value);
-          // print(value['description']);
-
-          
-
-         
 
         });
   });
   }
 
-  List<String> titles = [];
   Map<String, String> cats = {};
-
-  // List<String> description = [];
-
+  Map<String, String> dogs = {};
+  var contextPublic;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -256,105 +333,73 @@ class _MyCustomFormState extends State<MyCustomForm> {
                   color: Colors.white), 
               child: new Icon(Icons.library_books),
           ),
-          label: Text('ListView',style: TextStyle(color:Colors.white,fontSize: 23)), 
+          label: Text('AppleList',style: TextStyle(color:Colors.white,fontSize: 23)), 
           shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20)),
           onPressed: null,
         ),
         actions: <Widget>[
+          Builder(
+        builder: (context) => 
             // action button
             IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
-                // _select(choices[0]);
+                testing(context);
+                
               },
             ),
             // action button
-            
+          )
           ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: <Widget>[
-            TextField(
-              maxLength: 200,
-              controller: myController,
-              obscureText: false,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'TextField2',
-              ),
-            ),
-            // new Container(
-            //   margin: const EdgeInsets.only(bottom: 2.0),
-            //   child: new RaisedButton(
-            //     color: Colors.teal,
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(20)),
-            //     onPressed: submitData,
-            //     child: new Text('Submit data',
-            //         style: TextStyle(fontSize: 23, color: Colors.white)),
-            //   ),
-            // ),
-
-          FlatButton.icon(
-            color: Colors.teal,
-            icon: 
-            new IconTheme(
-                data: new IconThemeData(
-                    size: 35,
-                    color: Colors.white), 
-                child: new Icon(Icons.add),
-            ),
-            label: Text('Add a Record',style: TextStyle(color:Colors.white,fontSize: 23)), 
-            shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)),
-            onPressed: createRecord,
-          ),
-
+            
             Expanded(
               child: ListView.builder(
                 itemCount: cats.length,
                 itemBuilder: (context, index) {
                   var hey = cats.keys.toList();
-
+                  var test = dogs.keys.toList();
                   final item = cats[hey[index]];
+                  final itemNew = dogs[test[index]];
                   final item2 = hey[index];
 
                   return Card(
+                    shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
                     child: ListTile(
                       leading: Icon(Icons.navigate_next),
                       title: 
-                      
-                      // Text('$item2 \n$item ',style: TextStyle(fontSize: 18),)
-                      
-                      RichText(
-                        text: TextSpan(
-                          text: '',
-                          style: 
-                            new TextStyle(
-                            inherit: true,
-                            fontSize: 23,
-                            fontWeight: FontWeight.w800,
-                            decorationStyle: TextDecorationStyle.wavy,
-                            color: Colors.black),
+                      new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          new Text(item,style: TextStyle(fontWeight: FontWeight.w500,fontSize: 19.6)),
+                          new Text(itemNew,style: TextStyle(fontWeight: FontWeight.w300,fontSize: 14.9))
+                        ]
+                      ),
+                      // RichText(
+                      //   text: TextSpan(
+                      //     text: '',
+                      //     style: 
+                      //       new TextStyle(
+                      //       inherit: true,
+                      //       fontSize: 23,
+                      //       fontWeight: FontWeight.w800,
+                      //       decorationStyle: TextDecorationStyle.wavy,
+                      //       color: Colors.black),
 
-                          children: <TextSpan>[
-                            TextSpan(text:'$item', style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18.6)),
-                          ],
-                        ),
-                      )
+                      //     children: <TextSpan>[
+                      //       TextSpan(text:'$item', style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18.6)),
+                      //     ],
+                      //   ),
+                      // )
                       
-                      ,
-
                       onLongPress: (){_deleteFunction(item2,item);},
-                    ),
-                    
-                    
-                    
-                    
-                    
+                    ),   
                   );
                 },
               ),
@@ -365,13 +410,4 @@ class _MyCustomFormState extends State<MyCustomForm> {
     );
   }
 }
-// The base class for the different types of items the list can contain.
-abstract class ListItem {}
 
-// A ListItem that contains data to display a message.
-class MessageItem implements ListItem {
-  final String sender;
-  final String body;
-
-  MessageItem(this.sender, this.body);
-}
