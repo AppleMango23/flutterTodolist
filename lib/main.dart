@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'ListView',
       theme: ThemeData(
         primarySwatch: Colors.teal,
+        // canvasColor: Colors.transparent,
       ),
       home: MyCustomForm(),
     );
@@ -184,14 +185,27 @@ class _MyCustomFormState extends State<MyCustomForm> {
       contextPublic=context;
     });
 
-    showModalBottomSheet<void>(context: context,
+    showModalBottomSheet<void>(
+    context: context,
     builder: (BuildContext context) {
       return new Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Padding(
+          
+          Container(
+            color: Color(0xFF737373), // This line set the transparent background
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16.0),
+                      topRight: Radius.circular( 16.0)
+                  )
+              ),
+              child: Padding(
             // padding: const EdgeInsets.all(20.0),
             padding: const EdgeInsets.only(top: 20.0,left: 20,right: 20,bottom: 34),
+            
         child: Column(
           children: <Widget>[
             TextField(
@@ -241,6 +255,8 @@ class _MyCustomFormState extends State<MyCustomForm> {
           
           ]
         )
+          ,)
+            ),
           )
           
         ],
@@ -301,6 +317,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
     }
     
   }
+  
 
   void checkRecord(){
     
@@ -387,13 +404,29 @@ class _MyCustomFormState extends State<MyCustomForm> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Text('Drawer Header'),
+              child: FlatButton.icon(
+                      color: Colors.transparent,
+                      icon: 
+                      new IconTheme(
+                          data: new IconThemeData(
+                              size: 35,
+                              color: Colors.white), 
+                          child: new Icon(Icons.library_books),
+                      ),
+                      label: Text('AppleList',style: TextStyle(color:Colors.white,fontSize: 23)), 
+                      shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                      onPressed: null,
+                    ),
               decoration: BoxDecoration(
                 color: Colors.teal,
+                borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(11.0),
+                bottomRight: Radius.circular(11.0))
               ),
             ),
             ListTile(
-              title: Text('Item 1'),
+              title: Text('To do list'),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -402,7 +435,34 @@ class _MyCustomFormState extends State<MyCustomForm> {
               },
             ),
             ListTile(
-              title: Text('Item 2'),
+              title: Text('Rating'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Terms and condition'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Help'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Logout'),
               onTap: () {
                 // Update the state of the app
                 // ...
