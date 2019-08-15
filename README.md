@@ -7,8 +7,8 @@ This project will be mainly on using listview that connected with firebase to do
 - message toast after action (done)<br>
 - menu on side (done)<br>
 - adding object to make the listview easier to manage (done)<br>
-- press search or add will go another screen +conditioner rendering<br>
-- searching on map<br>
+- press search or add will go another screen +conditioner rendering (done)<br>
+- searching by using map filter (otw)<br>
 - timeline history <br>
 - adding delete, edit to the software <br>
 
