@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:math';
 import 'dart:async';
+import 'second.dart';
 
 // import 'second.dart';
 void main() => runApp(MyApp());
@@ -157,6 +158,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
       },
     );
   }
+  
   snackbarFunction(BuildContext context,String wordsToDisplay){
     final snackBar = SnackBar(
       content: Text(wordsToDisplay,style: TextStyle(fontSize: 17),),
@@ -318,21 +320,15 @@ class _MyCustomFormState extends State<MyCustomForm> {
     
   }
   
-
   void checkRecord(){
-    
     cats.clear();
     dogs.clear();
-
-
 
     databaseReference.child('posts/').once().then((DataSnapshot snapshot) {
     Map<dynamic, dynamic> fridgesDs = snapshot.value;
 
     if(fridgesDs == null){
-      setState(() {
-        //refresh the screen
-      });
+      setState(() {});
     }
     else{
       fridgesDs.forEach((key, value) {
@@ -343,11 +339,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
           });
 
         });
-    }
-        
-    });
-   
-    
+    }});
   }
 
   Map<String, String> cats = {};
@@ -376,7 +368,10 @@ class _MyCustomFormState extends State<MyCustomForm> {
           IconButton(
               icon: Icon(Icons.search),
               onPressed: () {
-                testing(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SecondRoute()),
+                  );
                 
               },),
           Builder(
@@ -497,26 +492,10 @@ class _MyCustomFormState extends State<MyCustomForm> {
                       new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          new Text(item,style: TextStyle(fontWeight: FontWeight.w500,fontSize: 19.6)),
+                          new Text(item,style: TextStyle(fontWeight: FontWeight.w400,fontSize: 19.6)),
                           new Text(itemNew,style: TextStyle(fontWeight: FontWeight.w300,fontSize: 14.9))
                         ]
                       ),
-                      // RichText(
-                      //   text: TextSpan(
-                      //     text: '',
-                      //     style: 
-                      //       new TextStyle(
-                      //       inherit: true,
-                      //       fontSize: 23,
-                      //       fontWeight: FontWeight.w800,
-                      //       decorationStyle: TextDecorationStyle.wavy,
-                      //       color: Colors.black),
-
-                      //     children: <TextSpan>[
-                      //       TextSpan(text:'$item', style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18.6)),
-                      //     ],
-                      //   ),
-                      // )
                       
                       onLongPress: (){_deleteFunction(item2,item);},
                     ),   
