@@ -33,20 +33,20 @@ class _ExamplePageState extends State<SecondRoute> {
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle = new Text( 'Search Example' );
 
-  _ExamplePageState() {
-    _filter.addListener(() {
-      if (_filter.text.isEmpty) {
-        setState(() {
-          _searchText = "";
-          filteredNames = names;
-        });
-      } else {
-        setState(() {
-          _searchText = _filter.text;
-        });
-      }
-    });
-  }
+  // _ExamplePageState() {
+  //   _filter.addListener(() {
+  //     if (_filter.text.isEmpty) {
+  //       setState(() {
+  //         _searchText = "";
+  //         filteredNames = names;
+  //       });
+  //     } else {
+  //       setState(() {
+  //         _searchText = _filter.text;
+  //       });
+  //     }
+  //   });
+  // }
 
   @override
   void initState() {
@@ -58,7 +58,7 @@ class _ExamplePageState extends State<SecondRoute> {
     return Scaffold(
       appBar: _buildBar(context),
       body: Container(
-        child: _buildList(),
+        // child: _buildList(),
       ),
       resizeToAvoidBottomPadding: false,
     );
@@ -76,31 +76,12 @@ class _ExamplePageState extends State<SecondRoute> {
     );
   }
 
-  Widget _buildList() {
-    if (!(_searchText.isEmpty)) {
-      List tempList = new List();
-      for (int i = 0; i < filteredNames.length; i++) {
-        if (filteredNames[i]['name'].toLowerCase().contains(_searchText.toLowerCase())) {
-          tempList.add(filteredNames[i]);
-        }
-      }
-      filteredNames = tempList;
-    }
-    return ListView.builder(
-      itemCount: names == null ? 0 : filteredNames.length,
-      itemBuilder: (BuildContext context, int index) {
-        return new ListTile(
-          title: Text(filteredNames[index]['name']),
-          onTap: () => print(filteredNames[index]['name']),
-        );
-      },
-    );
-  }
 
+  //After press will trigger the change
   void _searchPressed() {
     setState(() {
       if (this._searchIcon.icon == Icons.search) {
-        this._searchIcon = new Icon(Icons.close);
+        this._searchIcon = new Icon(Icons.arrow_back);
         this._appBarTitle = new TextField(
           controller: _filter,
           decoration: new InputDecoration(
@@ -117,9 +98,10 @@ class _ExamplePageState extends State<SecondRoute> {
     });
   }
 
+  // This one no need to see
   void _getNames() async {
     // final response = await dio.get('https://swapi.co/api/people');
-    List tempList = new List();
+    // List tempList = new List();
     // for (int i = 0; i < response.data['results'].length; i++) {
       // tempList.add(response.data['results'][i]);
     // }

@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'ListView',
+      title: 'AppleList',
       theme: ThemeData(
         primarySwatch: Colors.teal,
         // canvasColor: Colors.transparent,
@@ -35,6 +35,43 @@ class _MyCustomFormState extends State<MyCustomForm> {
   String textfield1 = "";
   final databaseReference = FirebaseDatabase.instance.reference();
 
+  // Things to declare and use on search
+  final TextEditingController _filter = new TextEditingController();
+  String _searchText = "";
+  List names = new List();
+  List filteredNames = new List();
+  Icon _searchIcon = new Icon(Icons.search);
+  Widget _appBarTitle = new FlatButton.icon(
+          color: Colors.transparent,
+          icon: 
+          new IconTheme(
+              data: new IconThemeData(
+                  size: 35,
+                  color: Colors.white), 
+              child: new Icon(Icons.library_books),
+          ),
+          label: Text('AppleList',style: TextStyle(color:Colors.white,fontSize: 23)), 
+          shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20)),
+          onPressed: null,
+        );
+
+  // Function for search listener
+  _ExamplePageState() {
+    _filter.addListener(() {
+      if (_filter.text.isEmpty) {
+        setState(() {
+          _searchText = "";
+          filteredNames = names;
+        });
+      } else {
+        setState(() {
+          _searchText = _filter.text;
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,54 +85,6 @@ class _MyCustomFormState extends State<MyCustomForm> {
     // Clean up the controller when the widget is removed from the widget tree & _printLatestValue listener
     myController.dispose();
     super.dispose();
-  }
-
-  passwordChecker() {
-    if (myController.text == "test") {
-      print("password verified completed!");
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          // return object of type Dialog
-          return AlertDialog(
-            title: new Text("Password Verified completed!!"),
-            content: new Text(
-                "Good job User, your password is correct! Please double check your user password to make sure it is secure and safe\n\nYour password is ${myController.text}"),
-            actions: <Widget>[
-              // usually buttons at the bottom of the dialog
-              new FlatButton(
-                child: new Text("Close"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      print("password verified FAIL!");
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          // return object of type Dialog
-          return AlertDialog(
-            title: new Text("Password verified FAIL!"),
-            content: new Text(
-                "A very sad news please go check your password with admin! Please double check your user password to make sure it is secure and safe\n\n${myController.text} is not a correct password!"),
-            actions: <Widget>[
-              // usually buttons at the bottom of the dialog
-              new FlatButton(
-                child: new Text("Close"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
   }
 
   //make this link to the firebase + map array
@@ -201,8 +190,10 @@ class _MyCustomFormState extends State<MyCustomForm> {
                 color: Colors.white,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(16.0),
-                      topRight: Radius.circular( 16.0)
+                      topRight: Radius.circular( 16.0),
+                      
                   )
+                
               ),
               child: Padding(
             // padding: const EdgeInsets.all(20.0),
@@ -342,15 +333,30 @@ class _MyCustomFormState extends State<MyCustomForm> {
     }});
   }
 
-  Map<String, String> cats = {};
-  Map<String, String> dogs = {};
-  var contextPublic;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title:  
-        FlatButton.icon(
+  void _searchPressed() {
+    setState(() {
+      if (this._searchIcon.icon == Icons.search) {
+        this._searchIcon = new Icon(Icons.close);
+        this._appBarTitle = new TextField(
+          style: TextStyle(color: Colors.white),
+          controller: _filter,
+          decoration: new InputDecoration(
+            enabledBorder: const OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
+            ),
+            prefixIcon: new IconTheme(
+              data: new IconThemeData(
+                  color: Colors.white), 
+              child: new Icon(Icons.search),
+            ),
+            hintText: 'Search...',
+            hintStyle: TextStyle(fontSize: 22.0, color: Colors.white),
+            
+          ),
+        );
+      } else {
+        this._searchIcon = new Icon(Icons.search);
+        this._appBarTitle = new FlatButton.icon(
           color: Colors.transparent,
           icon: 
           new IconTheme(
@@ -363,15 +369,30 @@ class _MyCustomFormState extends State<MyCustomForm> {
           shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20)),
           onPressed: null,
-        ),
+        );
+        filteredNames = names;
+        _filter.clear();
+      }
+    });
+  }
+
+  Map<String, String> cats = {};
+  Map<String, String> dogs = {};
+  var contextPublic;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title:_appBarTitle,
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.search),
+              icon: _searchIcon,
               onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SecondRoute()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => SecondRoute()),
+                  // );
+                  _searchPressed();
                 
               },),
           Builder(
