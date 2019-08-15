@@ -202,7 +202,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
         child: Column(
           children: <Widget>[
             TextField(
-              maxLength: 30,
+              maxLength: 24,
               controller: myController,
               obscureText: false,
               decoration: InputDecoration(
