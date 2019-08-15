@@ -142,11 +142,13 @@ class _MyCustomFormState extends State<MyCustomForm> {
             // shape: RoundedRectangleBorder(
             // borderRadius: BorderRadius.circular(20)),
             onPressed: () {
+                // setState(() {});
                 cats.remove(textDelete);
                 checkRecord();
                 databaseReference.child('posts/'+textDelete).remove();
                 Navigator.of(context).pop();
                 trigerSnackBar('Deleted a list!');
+                
               },
           ),
           ],
@@ -160,14 +162,16 @@ class _MyCustomFormState extends State<MyCustomForm> {
       action: SnackBarAction(
         label: 'Cancel',textColor: Colors.white,
         onPressed: () {
-          
+          // Some code to undo the change.
         },
       ),
       backgroundColor: Colors.teal
       );
     Scaffold.of(context).showSnackBar(snackBar);
     Timer(Duration(seconds: 9), () {
+      print(wordsToDisplay);
       Scaffold.of(context).hideCurrentSnackBar();
+      
     });
   }
 
@@ -303,9 +307,18 @@ class _MyCustomFormState extends State<MyCustomForm> {
     cats.clear();
     dogs.clear();
 
+
+
     databaseReference.child('posts/').once().then((DataSnapshot snapshot) {
-     Map<dynamic, dynamic> fridgesDs = snapshot.value;
-        fridgesDs.forEach((key, value) {
+    Map<dynamic, dynamic> fridgesDs = snapshot.value;
+
+    if(fridgesDs == null){
+      setState(() {
+        //refresh the screen
+      });
+    }
+    else{
+      fridgesDs.forEach((key, value) {
           //This one need to work with setstate so that it will render once
           setState(() {
             cats.addAll({key:value['description']});
@@ -313,7 +326,11 @@ class _MyCustomFormState extends State<MyCustomForm> {
           });
 
         });
-  });
+    }
+        
+    });
+   
+    
   }
 
   Map<String, String> cats = {};
@@ -339,6 +356,12 @@ class _MyCustomFormState extends State<MyCustomForm> {
           onPressed: null,
         ),
         actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                testing(context);
+                
+              },),
           Builder(
         builder: (context) => 
             // action button
@@ -348,16 +371,53 @@ class _MyCustomFormState extends State<MyCustomForm> {
                 testing(context);
                 
               },
+              
             ),
             // action button
-          )
+          ),
+           
           ],
       ),
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('Drawer Header'),
+              decoration: BoxDecoration(
+                color: Colors.teal,
+              ),
+            ),
+            ListTile(
+              title: Text('Item 1'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Item 2'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: <Widget>[
-            
             Expanded(
               child: ListView.builder(
                 itemCount: cats.length,
