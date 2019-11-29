@@ -31,7 +31,7 @@ class _ExamplePageState extends State<SecondRoute> {
   List names = new List();
   List filteredNames = new List();
   Icon _searchIcon = new Icon(Icons.search);
-  Widget _appBarTitle = new Text( 'Search Example' );
+  Widget _appBarTitle = new Text( 'Dart other pages' );
 
   // _ExamplePageState() {
   //   _filter.addListener(() {
@@ -58,7 +58,7 @@ class _ExamplePageState extends State<SecondRoute> {
     return Scaffold(
       appBar: _buildBar(context),
       body: Container(
-        // child: _buildList(),
+        child: _buildList(),
       ),
       resizeToAvoidBottomPadding: false,
     );
@@ -76,6 +76,13 @@ class _ExamplePageState extends State<SecondRoute> {
     );
   }
 
+  Widget _buildList() {
+    return Container(
+      alignment: Alignment.center,
+      // child: new Text("Good morning everyone thank you for looking at my page, this is the first time i touch flutter hope u like it thank you. If you have any ideas want to change something please let me know on github. :)",style: TextStyle(fontSize: 25),textAlign: TextAlign.center,)
+      );
+  }
+
 
   //After press will trigger the change
   void _searchPressed() {
@@ -91,7 +98,7 @@ class _ExamplePageState extends State<SecondRoute> {
         );
       } else {
         this._searchIcon = new Icon(Icons.search);
-        this._appBarTitle = new Text( 'Search Example' );
+        this._appBarTitle = new Text( 'Hi raymond' );
         filteredNames = names;
         _filter.clear();
       }
