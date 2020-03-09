@@ -52,7 +52,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
       data: new IconThemeData(size: 35, color: Colors.white),
       child: new Icon(Icons.library_books),
     ),
-    label: Text('Today is good',
+    label: Text('Noah list',
         style: TextStyle(color: Colors.white, fontSize: 23)),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     onPressed: null,
@@ -141,6 +141,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
                 trigerSnackBar('Deleted a list!');
               },
             ),
+            
           ],
         );
       },
@@ -541,6 +542,13 @@ class _MyCustomFormState extends State<MyCustomForm> {
                   );
                 },
               ),
+            ),
+            FloatingActionButton(
+              onPressed: () {
+                testing(context);
+              },
+              child: Icon(Icons.add),
+              backgroundColor: Colors.teal,
             ),
           ],
         ),
