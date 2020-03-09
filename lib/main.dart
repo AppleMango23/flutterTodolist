@@ -1,9 +1,10 @@
+//firebase still cant connect to it
+
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:math';
 import 'dart:async';
-import 'second.dart';
-import 'component/test.dart';
+
 
 // import 'second.dart';
 void main() => runApp(MyApp());
@@ -35,6 +36,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
   //To create a textfield connector step1
   final myController = TextEditingController();
   String textfield1 = "";
+  
   final databaseReference = FirebaseDatabase.instance.reference();
 
   // Things to declare and use on search
@@ -71,6 +73,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
     checkRecord();
     //make text field connect to function
     _filter.addListener(_ExamplePageState);
+    
   }
 
   @override
@@ -476,6 +479,8 @@ class _MyCustomFormState extends State<MyCustomForm> {
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: <Widget>[
+            
+           
             //Loading indicator
             // new CircularProgressIndicator(),
             Expanded(

@@ -1,23 +1,16 @@
-# Project noah
-This project will be mainly on using listview that connected with firebase to do something like Todolist. Able to check the date of the posts. And can be log in(maybe with some auth). Data can be review by date and the string of a specific data. User are able to do action like add, delete and rename on the data. User are allow to do searching on the data. And they are able to access to the menu bar which can go to any pages they wish to.
+# todolist_two
 
-## Features done
-- link with firebase (done)<br>
-- upload data to db (done)<br>
-- message toast after action (done)<br>
-- menu on side (done)<br>
-- adding object to make the listview easier to manage (done)<br>
-- press search or add will go another screen +conditioner rendering (done)<br>
+A new Flutter project.
 
-## Features upcoming
-- slide left to delete <br>
-- adding delete, edit to the software<br>
-- calender<br>
-- dark mode<br>
-- When press input go to another screen<br>
-- searching by using map filter<br>
-- timeline history <br>
-- long press to do some action<br>
+## Getting Started
 
-## Screenshot of App
-- coming soon...
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+
+For help getting started with Flutter, view our
+[online documentation](https://flutter.dev/docs), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
