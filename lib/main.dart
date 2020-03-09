@@ -342,7 +342,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
             data: new IconThemeData(size: 35, color: Colors.white),
             child: new Icon(Icons.library_books),
           ),
-          label: Text('I love today',
+          label: Text('Cool list',
               style: TextStyle(color: Colors.white, fontSize: 23)),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -427,21 +427,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
               _searchPressed();
             },
           ),
-          Builder(
-            builder: (context) =>
-                // action button
-                IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                // SomeClassFromMyLibrary hey = new SomeClassFromMyLibrary();
-                // // print(hey.t);
-                // hey.testFunction();
-
-                testing(context);
-              },
-            ),
-            // action button
-          ),
+         
         ],
       ),
       drawer: Drawer(
@@ -494,12 +480,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
                   final itemNew = dogs[test[index]];
                   final item2 = hey[index];
 
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Container(
-                      height: 90,
-                      child: 
+                  return 
                       Dismissible(
                         // Specify the direction to swipe and delete
                         direction: DismissDirection.endToStart,
@@ -509,12 +490,20 @@ class _MyCustomFormState extends State<MyCustomForm> {
                           _deleteFunction(item2, item, 'swipe');
                         },
                         background: Container(
+                          
                           decoration: BoxDecoration(
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(5)),
                           child: Icon(Icons.delete,color:Colors.white,size:30),),
-                        child: ListTile(
-                        leading: Icon(Icons.notifications_active),
+                        child: 
+                        Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Container(
+                          height: 70,
+                          child: 
+                        ListTile(
+                        leading: Icon(Icons.stars,size: 30,),
                         title: new Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
